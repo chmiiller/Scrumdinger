@@ -10,6 +10,9 @@ import ThemeKit
 
 struct DetailView: View {
     let scrum: DailyScrum
+
+    @State private var isPresentingEditView: Bool = false
+
     var body: some View {
         List {
             Section(header: Text("Meeting Info")) {
@@ -42,6 +45,36 @@ struct DetailView: View {
             }
         }
         .navigationTitle(scrum.title)
+        .toolbar {
+            Button {
+                isPresentingEditView = true
+            } label: {
+                Text("Edit")
+            }
+
+        }
+        .sheet(isPresented: $isPresentingEditView) {
+            NavigationStack {
+                DetailEditView()
+                    .navigationTitle(scrum.title)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button {
+                                isPresentingEditView = false
+                            } label: {
+                                Text("Cancel")
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button {
+                                isPresentingEditView = false
+                            } label: {
+                                Text("Done")
+                            }
+                        }
+                    }
+            }
+        }
     }
 }
 
