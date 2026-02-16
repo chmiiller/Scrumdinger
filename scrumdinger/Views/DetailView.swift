@@ -57,25 +57,10 @@ struct DetailView: View {
         }
         .sheet(isPresented: $isPresentingEditView) {
             NavigationStack {
-                DetailEditView(scrum: $editingScrum)
-                    .navigationTitle(scrum.title)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button {
-                                isPresentingEditView = false
-                            } label: {
-                                Text("Cancel")
-                            }
-                        }
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button {
-                                isPresentingEditView = false
-                                scrum = editingScrum
-                            } label: {
-                                Text("Done")
-                            }
-                        }
-                    }
+                DetailEditView(scrum: $editingScrum, savedEdits: { dailyScrum in
+                    scrum = dailyScrum
+                })
+                .navigationTitle(scrum.title)
             }
         }
     }
