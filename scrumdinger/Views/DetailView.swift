@@ -6,18 +6,18 @@
 //
 
 import SwiftUI
+import SwiftData
 import ThemeKit
 
 struct DetailView: View {
-    @Binding var scrum: DailyScrum
+    let scrum: DailyScrum
 
     @State private var isPresentingEditView: Bool = false
-    @State private var editingScrum: DailyScrum = DailyScrum.emptyScrum
 
     var body: some View {
         List {
             Section(header: Text("Meeting Info")) {
-                NavigationLink(destination: MeetingView(scrum: $scrum)) {
+                NavigationLink(destination: MeetingView(scrum: scrum)) {
                     Label("Start Meeting", systemImage: "timer")
                         .accessibilityLabel("Start a new meeting button")
                         .font(.headline)
@@ -60,7 +60,6 @@ struct DetailView: View {
         .toolbar {
             Button {
                 isPresentingEditView = true
-                editingScrum = scrum
             } label: {
                 Text("Edit")
             }
@@ -68,18 +67,16 @@ struct DetailView: View {
         }
         .sheet(isPresented: $isPresentingEditView) {
             NavigationStack {
-                DetailEditView(scrum: $editingScrum, savedEdits: { dailyScrum in
-                    scrum = dailyScrum
-                })
+                DetailEditView(scrum: scrum)
                 .navigationTitle(scrum.title)
             }
         }
     }
 }
 
-#Preview {
-    @Previewable @State var scrum = DailyScrum.sampleData[1]
+#Preview(traits: .dailyScrumSampleData) {
+    @Previewable @Query(sort: \DailyScrum.title) var scrums: [DailyScrum]
     NavigationStack {
-        DetailView(scrum: $scrum)
+        DetailView(scrum: scrums[0])
     }
 }

@@ -6,13 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 import AVFoundation
 import ThemeKit
 import TimerKit
 
 struct MeetingView: View {
-    @Binding var scrum: DailyScrum
+    @Environment(\.modelContext) private var context
     @State var scrumTimer: ScrumTimer = ScrumTimer()
+    let scrum: DailyScrum
     
     private let player: AVPlayer = AVPlayer.dingPlayer()
 
@@ -55,10 +57,10 @@ struct MeetingView: View {
         scrumTimer.stopScrum()
         let history = History(attendees: scrum.attendees)
         scrum.history.insert(history, at: 0)
+        try? context.save()
     }
 }
 
 #Preview {
-    @Previewable @State var scrum = DailyScrum.sampleData[0]
-    MeetingView(scrum: $scrum)
+    MeetingView(scrum: DailyScrum.sampleData[0])
 }

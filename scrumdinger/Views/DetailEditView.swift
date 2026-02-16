@@ -6,41 +6,67 @@
 //
 
 import SwiftUI
+import SwiftData
+import ThemeKit
 
 struct DetailEditView: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var scrum: DailyScrum
-    let savedEdits: (DailyScrum) -> Void
+    @Environment(\.modelContext) private var context
+    
     @State private var attendeeName: String = ""
+    @State private var attendees: [Attendee]
+    @State private var lengthInMinutesAsDouble: Double
+    @State private var title: String
+    @State private var theme: Theme
+
+    let scrum: DailyScrum
+    private let isCreatingScrum: Bool
+    
+    init(scrum: DailyScrum?) {
+        let scrumToEdit: DailyScrum
+        if let scrum {
+            scrumToEdit = scrum
+            isCreatingScrum = false
+        } else {
+            scrumToEdit = DailyScrum(title: "", attendees: [], lengthInMinutes: 5, theme: .sky)
+            isCreatingScrum = true
+        }
+        
+        self.scrum = scrumToEdit
+        self.attendees = scrumToEdit.attendees
+        self.lengthInMinutesAsDouble = scrumToEdit.lengthInMinutesAsDouble
+        self.title = scrumToEdit.title
+        self.theme = scrumToEdit.theme
+    }
     
     var body: some View {
         Form {
             Section(header: Text("Meeting Info")) {
-                TextField("Title", text: $scrum.title)
+                TextField("Title", text: $title)
                 HStack {
-                    Slider(value: $scrum.lengthInMinutesAsDouble, in: 5...30, step: 1) {
+                    Slider(value: $lengthInMinutesAsDouble, in: 5...30, step: 1) {
                         Text("Length") // VoiceOver accessibility
                     }
-                    .accessibilityValue("\(scrum.lengthInMinutes) minutes")
+                    .accessibilityValue("\(String(format: "%.0f", lengthInMinutesAsDouble)) minutes")
                     Spacer()
                     Text("\(scrum.lengthInMinutes) minutes")
                         .accessibilityHidden(true)
                 }
-                ThemePicker(selection: $scrum.theme)
+                ThemePicker(selection: $theme)
             }
             Section(header: Text("Attendees")) {
-                ForEach(scrum.attendees) { person in
+                ForEach(attendees) { person in
                     Text(person.name)
                 }
                 .onDelete { indices in
-                    scrum.attendees.remove(atOffsets: indices)
+                    attendees.remove(atOffsets: indices)
                 }
                 HStack {
                     TextField("New Attendee", text: $attendeeName)
                     Button {
                         withAnimation {
                             let attendee = Attendee(name: attendeeName)
-                            scrum.attendees.append(attendee)
+                            attendees.append(attendee)
                             attendeeName = ""
                         }
                     } label: {
@@ -59,15 +85,28 @@ struct DetailEditView: View {
             }
             ToolbarItem(placement: .confirmationAction) {
                 Button("Done") {
-                    savedEdits(scrum)
+                    saveEdits()
                     dismiss()
                 }
             }
         }
     }
+    
+    private func saveEdits() {
+        scrum.attendees = attendees
+        scrum.lengthInMinutesAsDouble = lengthInMinutesAsDouble
+        scrum.title = title
+        scrum.theme = theme
+        
+        if isCreatingScrum {
+            context.insert(scrum)
+        }
+        
+        try? context.save()
+    }
 }
 
-#Preview {
-    @Previewable @State var scrum: DailyScrum = DailyScrum.sampleData[0]
-    DetailEditView(scrum: $scrum, savedEdits: { _ in })
+#Preview(traits: .dailyScrumSampleData) {
+    @Previewable @Query(sort: \DailyScrum.title) var scrums: [DailyScrum]
+    DetailEditView(scrum: scrums[0])
 }
