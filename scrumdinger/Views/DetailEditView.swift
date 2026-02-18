@@ -19,6 +19,7 @@ struct DetailEditView: View {
     @State private var title: String
     @State private var theme: Theme
     @State private var errorWrapper: ErrorWrapper?
+    @State private var isConfirmingDelete: Bool = false
     let scrum: DailyScrum
     private let isCreatingScrum: Bool
     
@@ -76,6 +77,25 @@ struct DetailEditView: View {
                     .disabled(attendeeName.isEmpty)
                 }
             }
+            if !isCreatingScrum {
+                Section(header: Text("Danger Zone")) {
+                    Button(role: .destructive) {
+                        isConfirmingDelete = true
+                    } label: {
+                        HStack {
+                            Image(systemName: "trash")
+                            Text("Delete Meeting")
+                        }
+                    }
+                    .confirmationDialog("Are you sure you want to delete this meeting?",
+                                        isPresented: $isConfirmingDelete,
+                                        titleVisibility: .visible
+                    ) {
+                        Button("Delete", role: .destructive) { deleteMeeting() }
+                        Button("Cancel") { }
+                    }
+                }
+            }
         }
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
@@ -107,6 +127,11 @@ struct DetailEditView: View {
         }
 
         try context.save()
+    }
+    
+    private func deleteMeeting() {
+        context.delete(scrum)
+        dismiss()
     }
 }
 

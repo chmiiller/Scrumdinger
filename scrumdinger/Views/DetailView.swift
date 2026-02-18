@@ -10,11 +10,13 @@ import SwiftData
 import ThemeKit
 
 struct DetailView: View {
+    @Environment(\.modelContext) private var context
     let scrum: DailyScrum
 
     @State private var isPresentingEditView: Bool = false
     @State private var errorWrapper: ErrorWrapper?
 
+    let dateFormatter = Date.FormatStyle(date: .numeric, time: .shortened)
     var body: some View {
         List {
             Section(header: Text("Meeting Info")) {
@@ -53,9 +55,17 @@ struct DetailView: View {
                     NavigationLink(destination: HistoryView(history: history)) {
                         HStack {
                             Image(systemName: "calendar")
-                            Text(history.date, style: .date)
+                            Text(history.date, format: dateFormatter)
+                            Spacer()
+                            if history.transcript != nil {
+                                Image(systemName: "mic")
+                            }
                         }
                     }
+                }
+                .onDelete { indices in
+                    scrum.history.remove(atOffsets: indices)
+                    try? context.save()
                 }
             }
         }
