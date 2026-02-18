@@ -13,7 +13,7 @@ import TimerKit
 
 struct MeetingView: View {
     @Environment(\.modelContext) private var context
-    @State var scrumTimer: ScrumTimer = ScrumTimer()
+    @State var scrumTimer: ScrumTimer = ScrumTimer() // init onAppear
     let scrum: DailyScrum
     @Binding var errorWrapper: ErrorWrapper?
     

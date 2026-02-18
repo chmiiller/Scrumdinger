@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B37B572D2F438CC00043C54C /* TimerKit in Frameworks */ = {isa = PBXBuildFile; productRef = B37B572C2F438CC00043C54C /* TimerKit */; };
 		B37B57302F438D7B0043C54C /* TimerKit in Frameworks */ = {isa = PBXBuildFile; productRef = B37B572F2F438D7B0043C54C /* TimerKit */; };
+		B37CF40F2F46428D00A44711 /* TranscriptionKit in Frameworks */ = {isa = PBXBuildFile; productRef = B37CF40E2F46428D00A44711 /* TranscriptionKit */; };
 		B3FD36722F32A45100A0A53F /* ThemeKit in Frameworks */ = {isa = PBXBuildFile; productRef = B3FD36712F32A45100A0A53F /* ThemeKit */; };
 /* End PBXBuildFile section */
 
@@ -29,6 +30,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B37CF40F2F46428D00A44711 /* TranscriptionKit in Frameworks */,
 				B37B57302F438D7B0043C54C /* TimerKit in Frameworks */,
 				B3FD36722F32A45100A0A53F /* ThemeKit in Frameworks */,
 				B37B572D2F438CC00043C54C /* TimerKit in Frameworks */,
@@ -77,6 +79,7 @@
 				B3FD36712F32A45100A0A53F /* ThemeKit */,
 				B37B572C2F438CC00043C54C /* TimerKit */,
 				B37B572F2F438D7B0043C54C /* TimerKit */,
+				B37CF40E2F46428D00A44711 /* TranscriptionKit */,
 			);
 			productName = scrumdinger;
 			productReference = B3F098BC2F329CFA000D8BDC /* scrumdinger.app */;
@@ -109,6 +112,7 @@
 			packageReferences = (
 				B3FD36702F32A45100A0A53F /* XCLocalSwiftPackageReference "ThemeKit" */,
 				B37B572E2F438D7B0043C54C /* XCLocalSwiftPackageReference "TimerKit" */,
+				B37CF40D2F46428D00A44711 /* XCLocalSwiftPackageReference "TranscriptionKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B3F098BD2F329CFA000D8BDC /* Products */;
@@ -354,6 +358,10 @@
 			isa = XCLocalSwiftPackageReference;
 			relativePath = TimerKit;
 		};
+		B37CF40D2F46428D00A44711 /* XCLocalSwiftPackageReference "TranscriptionKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = TranscriptionKit;
+		};
 		B3FD36702F32A45100A0A53F /* XCLocalSwiftPackageReference "ThemeKit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ThemeKit;
@@ -368,6 +376,10 @@
 		B37B572F2F438D7B0043C54C /* TimerKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TimerKit;
+		};
+		B37CF40E2F46428D00A44711 /* TranscriptionKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = TranscriptionKit;
 		};
 		B3FD36712F32A45100A0A53F /* ThemeKit */ = {
 			isa = XCSwiftPackageProductDependency;
