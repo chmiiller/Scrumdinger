@@ -50,7 +50,7 @@ struct MeetingFooterView: View {
 }
 
 #Preview(traits: .sizeThatFitsLayout) {
-    var speakers = DailyScrum.sampleData[0].attendees
+    let speakers = DailyScrum.sampleData[0].attendees
         .map { $0.name }
         .map { ScrumTimer.Speaker(name: $0, isCompleted: false)}
     MeetingFooterView(speakers: speakers, skipAction: {})
