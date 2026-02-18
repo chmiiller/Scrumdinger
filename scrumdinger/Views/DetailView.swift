@@ -41,6 +41,12 @@ struct DetailView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 4))
                 }
                 .accessibilityElement(children: .combine)
+                HStack {
+                    Label("Transcription", systemImage: "mic")
+                    Spacer()
+                    Text(scrum.transcriptEnabled ? "On" : "Off")
+                }
+                .accessibilityElement(children: .combine)
             }
             Section(header: Text("Attendees")) {
                 ForEach(scrum.attendees) { attendee in

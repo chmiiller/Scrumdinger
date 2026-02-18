@@ -19,6 +19,7 @@ class DailyScrum: Identifiable {
         set { lengthInMinutes = Int(newValue) }
     }
     var theme: Theme
+    var transcriptEnabled: Bool
     
     @Relationship(deleteRule: .cascade, inverse: \Attendee.dailyScrum)
     var attendees: [Attendee]
@@ -26,7 +27,12 @@ class DailyScrum: Identifiable {
     @Relationship(deleteRule: .cascade, inverse: \History.dailyScrum)
     var history: [History] = []
     
-    init(id: UUID = UUID(), title: String, attendees: [String], lengthInMinutes: Int, theme: Theme) {
+    init(id: UUID = UUID(),
+         title: String,
+         attendees: [String],
+         lengthInMinutes: Int,
+         theme: Theme,
+         transcriptEnabled: Bool = true) {
         self.id = id
         self.title = title
         self.attendees = attendees.map({
@@ -34,5 +40,6 @@ class DailyScrum: Identifiable {
         })
         self.lengthInMinutes = lengthInMinutes
         self.theme = theme
+        self.transcriptEnabled = transcriptEnabled
     }
 }

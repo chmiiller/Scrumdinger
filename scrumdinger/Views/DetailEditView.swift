@@ -20,6 +20,7 @@ struct DetailEditView: View {
     @State private var theme: Theme
     @State private var errorWrapper: ErrorWrapper?
     @State private var isConfirmingDelete: Bool = false
+    @State private var transcriptEnabled: Bool
     let scrum: DailyScrum
     private let isCreatingScrum: Bool
     
@@ -38,6 +39,7 @@ struct DetailEditView: View {
         self.lengthInMinutesAsDouble = scrumToEdit.lengthInMinutesAsDouble
         self.title = scrumToEdit.title
         self.theme = scrumToEdit.theme
+        self.transcriptEnabled = scrumToEdit.transcriptEnabled
     }
     
     var body: some View {
@@ -54,6 +56,9 @@ struct DetailEditView: View {
                         .accessibilityHidden(true)
                 }
                 ThemePicker(selection: $theme)
+                Toggle(isOn: $transcriptEnabled) {
+                    Label("Transcription enabled", systemImage: "mic")
+                }
             }
             Section(header: Text("Attendees")) {
                 ForEach(attendees) { person in
@@ -117,10 +122,12 @@ struct DetailEditView: View {
     }
 
     private func saveEdits() throws {
+        print("$transcriptEnabled: \(transcriptEnabled)")
         scrum.attendees = attendees
         scrum.lengthInMinutesAsDouble = lengthInMinutesAsDouble
         scrum.title = title
         scrum.theme = theme
+        scrum.transcriptEnabled = transcriptEnabled
         
         if isCreatingScrum {
             context.insert(scrum)

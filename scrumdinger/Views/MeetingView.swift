@@ -57,17 +57,24 @@ struct MeetingView: View {
             player.seek(to: .zero)
             player.play()
         }
-        speechRecognizer.resetTranscript()
-        speechRecognizer.startTranscribing()
-        isRecording = true
+        if scrum.transcriptEnabled {
+            speechRecognizer.resetTranscript()
+            speechRecognizer.startTranscribing()
+            isRecording = true
+        } else {
+            isRecording = false
+        }
         scrumTimer.startScrum()
     }
     
     private func endScrum() throws {
         scrumTimer.stopScrum()
-        speechRecognizer.stopTranscribing()
-        isRecording = false
-        let history = History(attendees: scrum.attendees, transcript: speechRecognizer.transcript)
+        if scrum.transcriptEnabled {
+            speechRecognizer.stopTranscribing()
+            isRecording = false
+        }
+        let empty = speechRecognizer.transcript.isEmpty
+        let history = History(attendees: scrum.attendees, transcript: !empty ? speechRecognizer.transcript : nil)
         scrum.history.insert(history, at: 0)
         try context.save()
     }
